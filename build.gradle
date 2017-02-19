@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-tomcat-plugin:2.2.5'
+    }
+}
+
+plugins {
+    id "io.spring.dependency-management" version "1.0.0.RELEASE"
+}
+
+
+
+group 'br.hm.example'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'com.bmuschko.tomcat'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    dependencies {
+        dependency "junit:junit:${ext['junit.version']}"
+        dependency "com.fasterxml.jackson.core:jackson-databind:${ext['jackson.version']}"
+        dependencySet(group:'org.springframework', version: project.ext['spring.version'] ) {
+            entry('spring-context') {
+                exclude group: 'commons-logging', name: 'commons-logging'
+            }
+            entry 'spring-webmvc'
+            entry 'spring-jdbc'
+        }
+        dependencySet(group:'org.slf4j', version: project.ext['slf4j.version']) {
+            entry 'jcl-over-slf4j'
+            entry 'slf4j-api'
+        }
+        dependency ("ch.qos.logback:logback-classic:1.0.13"){
+            exclude group: 'org.slf4j', name: 'slf4j-api'
+        }
+
+        dependency "org.hsqldb:hsqldb:${ext['hsqldb.version']}"
+
+    }
+}
+
+
+
+dependencies {
+    compile "org.springframework:spring-context"
+
+    compile "org.springframework:spring-jdbc"
+    compile "org.hsqldb:hsqldb"
+
+    compile "org.springframework:spring-webmvc"
+    compile "com.fasterxml.jackson.core:jackson-databind"
+
+    compile "ch.qos.logback:logback-classic"
+    compile "org.slf4j:jcl-over-slf4j"
+
+    testCompile 'junit:junit'
+
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${project.ext['tomcat.version']}"
+    tomcat "org.apache.tomcat.embed:tomcat-embed-logging-juli:${project.ext['tomcat.version']}"
+    tomcat ("org.apache.tomcat.embed:tomcat-embed-jasper:${project.ext['tomcat.version']}"){
+        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+    }
+}
