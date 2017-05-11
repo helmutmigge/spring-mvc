@@ -35,6 +35,8 @@ dependencyManagement {
                 exclude group: 'commons-logging', name: 'commons-logging'
             }
             entry 'spring-webmvc'
+            entry 'spring-websocket'
+            entry 'spring-messaging'
             entry 'spring-jdbc'
         }
         dependencySet(group:'org.slf4j', version: project.ext['slf4j.version']) {
@@ -47,9 +49,16 @@ dependencyManagement {
 
         dependency "org.hsqldb:hsqldb:${ext['hsqldb.version']}"
 
+        dependency "org.springframework.session:spring-session-data-redis:${ext['session.data.redis.version']}"
+
+        dependency "biz.paluch.redis:lettuce:${ext['lettuce.version']}"
+
     }
 }
 
+war {
+    archiveName = "${project.name}.war"
+}
 
 
 dependencies {
@@ -59,15 +68,28 @@ dependencies {
     compile "org.hsqldb:hsqldb"
 
     compile "org.springframework:spring-webmvc"
+    compile "org.springframework:spring-websocket"
+    compile "org.springframework:spring-messaging"
+
     compile "com.fasterxml.jackson.core:jackson-databind"
+
+    compile "org.springframework.session:spring-session-data-redis"
+    compile "biz.paluch.redis:lettuce"
+
+    compile 'redis.clients:jedis:2.9.0'
 
     compile "ch.qos.logback:logback-classic"
     compile "org.slf4j:jcl-over-slf4j"
+
+
+
+    compileOnly group: 'javax.servlet', name: 'servlet-api', version: '2.5'
 
     testCompile 'junit:junit'
 
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${project.ext['tomcat.version']}"
     tomcat "org.apache.tomcat.embed:tomcat-embed-logging-juli:${project.ext['tomcat.version']}"
+    tomcat "org.apache.tomcat.embed:tomcat-embed-websocket:${project.ext['tomcat.version']}"
     tomcat ("org.apache.tomcat.embed:tomcat-embed-jasper:${project.ext['tomcat.version']}"){
         exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
     }
