@@ -7,7 +7,7 @@
 
     <script type="text/javascript">
 
-        function createsession() {
+        function getSession() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -16,6 +16,7 @@
             };
             xhttp.open("GET", "api/enableSession", true);
             xhttp.send();
+            document.getElementById('conversationSessionDiv').style.visibility = connected ? 'visible' : 'hidden';
         }
 
 	        var stompClient = null;
@@ -61,6 +62,13 @@
 	            stompClient.send("/app/chat", {}, JSON.stringify({'from':from, 'text':text}));
 	        }
 
+             function sendAttributeSession() {
+
+	        	var key = document.getElementById('keySession').value;
+	            var value = document.getElementById('valueSession').value;
+
+	        }
+
 	        function showMessageOutput(messageOutput) {
 
 	            var response = document.getElementById('response');
@@ -84,7 +92,8 @@
     </div>
     <br />
     <div>
-        <button id="createSession" onclick="createsession();">Create Session</button>
+        <button id="createSession" onclick="getSession();">Create Session</button>
+
         <button id="connect" onclick="connect();">Connect</button>
         <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
 
@@ -97,6 +106,13 @@
         <button  id="sendMessage" onclick="sendMessage();">Send</button>
         <p id="response"></p>
     </div>
+    <div id="conversationSessionDiv">
+        <input type="text" id="keySession" placeholder="Write a message..."/>
+        <input type="text" id="valueSession" placeholder="Write a message..."/>
+        <button  id="sendAttributeSession" onclick="sendMessage();">Send</button>
+        <p id="responseSession"></p>
+    </div>
+
 </div>
 
 </body>

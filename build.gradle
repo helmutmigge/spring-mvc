@@ -38,6 +38,7 @@ dependencyManagement {
             entry 'spring-websocket'
             entry 'spring-messaging'
             entry 'spring-jdbc'
+            entry 'spring-test'
         }
         dependencySet(group:'org.slf4j', version: project.ext['slf4j.version']) {
             entry 'jcl-over-slf4j'
@@ -51,7 +52,11 @@ dependencyManagement {
 
         dependency "org.springframework.session:spring-session-data-redis:${ext['session.data.redis.version']}"
 
+
+
         dependency "biz.paluch.redis:lettuce:${ext['lettuce.version']}"
+
+
 
     }
 }
@@ -86,6 +91,7 @@ dependencies {
     compileOnly group: 'javax.servlet', name: 'servlet-api', version: '2.5'
 
     testCompile 'junit:junit'
+    testCompile 'org.springframework:spring-test'
 
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${project.ext['tomcat.version']}"
     tomcat "org.apache.tomcat.embed:tomcat-embed-logging-juli:${project.ext['tomcat.version']}"
